@@ -1,0 +1,67 @@
+# Mind Map for WebRTC
+
+# What have we learned about WebRTC
+{
+    The idea behind the webRTC is to make a peer to peer connection to share media with less latency
+    For example (audio, video, data);
+
+    Some limitations of the webRTC
+    - webRTC uses UDP protocol - which is not reliable for transferring data.
+    - UDP is good for sending data so fastly but it doesn't check that the data has been sent to the location or not.
+    - webRTC has no internal signaling to connect to other users so that's why it need a server to initiate the connection first and then two peers can directly talk to each other.
+
+    ## Now here comes the terms inside the webRTC
+    {
+        Signaling:{
+            // This is the way to share your devices information to the another peer.
+            // Those connection details that each user shares is called ICE Candidates and also Session description protocol.
+            // SDP contains the information about the session connection like. {
+                codec, address, media type, video, audio and so on.
+                The first form that goes to peer 2 is called offer.
+                The second form comes from peer 2 to peer 1 called answer.
+            }
+            Ice Candidation{
+                This ice candidation is the IP address and port where the data was to be recieved.
+            }
+
+            We can establish a connection between two peer just by sharing the SDP but still cannot share the data. Why?
+            because many devices stands behind the firewall and NAT Devices. so to coordinate with the public ip address we have to use ICE.(Interactive Connectivity Establishment)
+        }
+    }
+}
+
+
+How it works construct
+
+- Media Capture {
+  To capture users media (Video and Audio)
+}
+
+- Signaling {
+  Before two peers can communicate they need to establish a c
+}
+
+Necessary APIs {
+  getUserMedia : This is for getting the user's media video and audio and provides MediaStream that can be used with RTCPeerConnection.
+
+  RTCPeerConnection:[
+    This is responsible for establishing and managing peer to peer connection.
+    It handles ICE negotiation, NAT traversal.
+    Media stream transmission.
+  ]
+
+  RTCDataChannel:[
+    This is responsible for streaming data end to end without needing a server.
+  ]
+
+  Signaling:[
+    It required to send the user remote info to another user with connection details for establishing peer to peer connection, But at first it needs a server to do this.
+    Using websocket and Http.
+  ]
+
+  [
+    MediaStream,
+    RTCIceCandidate,
+    RTCSessionDescription
+  ]
+}
