@@ -65,3 +65,9 @@ Necessary APIs {
     RTCSessionDescription
   ]
 }
+
+
+
+Now we're creating the room and getting the room id 
+
+- Now navigate user to the room and start with the join room

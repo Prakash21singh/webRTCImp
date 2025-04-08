@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Link } from "lucide-react";
-
+import { getSocket } from "@/utils/socketClient";
+import { useRouter } from "next/navigation";
+import CreateRoom from "../actions/CreateRoom";
 interface RoomJoinInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   onJoin?: (value: string) => void;
@@ -15,6 +15,9 @@ export const RoomJoinInput = React.forwardRef<
   RoomJoinInputProps
 >(({ className, onJoin, ...props }, ref) => {
   const [value, setValue] = React.useState("");
+  const [creating, setCreating] = React.useState<boolean>(false);
+  const [action, setAction] = React.useState<"Creating" | "Joining">();
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -23,17 +26,27 @@ export const RoomJoinInput = React.forwardRef<
     }
   };
 
-  const handleJoin = () => {
-    if (onJoin && value.trim()) {
-      onJoin(value);
+  React.useEffect(() => {
+    async function initiate() {
+      const socket = await getSocket();
+      socket.on("connect", () => {
+        socket.on("room-created", ({ roomId }) => {
+          setValue(`room/${roomId}`);
+        });
+      });
     }
-  };
+    initiate();
+  }, []);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && value.trim()) {
-      handleJoin();
+  async function handleJoin() {
+    try {
+      console.log("Failed to join");
+      router.push(value);
+    } catch (error) {
+    } finally {
+      setCreating(false);
     }
-  };
+  }
 
   return (
     <div className="relative w-full">
@@ -45,17 +58,18 @@ export const RoomJoinInput = React.forwardRef<
         ref={ref}
         value={value}
         onChange={handleChange}
-        onKeyDown={handleKeyDown}
         {...props}
         placeholder="Paste meet link or enter room id"
       />
-      <Button
-        type="button"
-        className="absolute right-1 top-1 z-10 cursor-pointer h-10 px-4 bg-black dark:bg-white"
-        onClick={handleJoin}
-        disabled={!value.trim()}>
-        <Link />
-      </Button>
+      <CreateRoom
+        value={value}
+        creating={creating}
+        setValue={setValue}
+        setCreating={setCreating}
+        action={action!}
+        setAction={setAction}
+        handleJoin={handleJoin}
+      />
     </div>
   );
 });

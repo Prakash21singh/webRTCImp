@@ -1,8 +1,5 @@
 import React from "react";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Link as LinkIcon } from "lucide-react";
-import { RoomJoinInput } from "../global/link";
+import { RoomJoinInput } from "../global/room-join-input";
 type Props = {};
 
 function Hero({}: Props) {

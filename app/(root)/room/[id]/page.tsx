@@ -7,6 +7,7 @@ type Props = {
 
 async function RoomPage({ params }: Props) {
   const { id } = await params;
+
   return (
     <div className="w-full flex items-center justify-center">
       <UserDisplay id={id} />
